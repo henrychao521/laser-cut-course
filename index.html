@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>雷射切割機在專題上的應用 — 研習課程站</title>
+<meta name="description" content="2026-07-07 教師研習完整紀錄:三版影片、五章講義、全文逐字稿搜尋、格狀鉸鏈互動計算器">
+<style>
+:root{
+  --paper:#faf7f1; --ink:#26221c; --dim:#6f675c; --rule:#d8d0c2;
+  --acc:#0f5aa8; --acc2:#b4531c; --mark:#fff3c4;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);
+  font-family:'PingFang TC','Noto Sans TC',sans-serif;line-height:1.85;font-size:16px}
+a{color:var(--acc);text-decoration:none}
+a:hover{text-decoration:underline}
+
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px;display:grid;
+  grid-template-columns:200px 1fr;gap:44px}
+@media(max-width:820px){.wrap{grid-template-columns:1fr;gap:0}}
+
+/* ── 側欄目次 ── */
+nav{position:sticky;top:0;align-self:start;padding:36px 0 24px;
+  font-size:13.5px;border-right:1px solid var(--rule);min-height:60vh}
+nav .t{font-weight:700;letter-spacing:.14em;color:var(--dim);font-size:11px;margin-bottom:14px}
+nav a{display:block;color:var(--ink);padding:5px 14px 5px 0;border-bottom:1px dotted var(--rule)}
+nav a:hover{color:var(--acc);text-decoration:none}
+nav a.sub{padding-left:14px;color:var(--dim)}
+@media(max-width:820px){nav{position:static;border-right:0;border-bottom:2px solid var(--ink);
+  min-height:0;padding:20px 0 12px}
+  nav a{display:inline-block;border:0;padding:2px 12px 2px 0}}
+
+main{padding:36px 0 90px;min-width:0}
+
+/* ── 講義標頭 ── */
+header.mast{border-bottom:3px double var(--ink);padding-bottom:22px;margin-bottom:34px}
+.kicker{font-size:12.5px;letter-spacing:.22em;color:var(--acc2);font-weight:700}
+h1{font-size:clamp(26px,4.5vw,40px);font-weight:800;line-height:1.3;margin:8px 0 10px}
+.meta{color:var(--dim);font-size:14px}
+.meta b{color:var(--ink)}
+
+/* ── 章節段落 ── */
+section{margin-bottom:52px}
+h2{font-size:21px;font-weight:800;border-bottom:1.5px solid var(--ink);
+  padding-bottom:8px;margin-bottom:18px;display:flex;align-items:baseline;gap:10px}
+h2 .no{font-size:13px;color:var(--acc2);letter-spacing:.1em;font-weight:700}
+h3{font-size:16.5px;margin:20px 0 8px}
+p{margin-bottom:12px}
+.lead{font-size:17px}
+ul.points{margin:10px 0 14px 0;list-style:none}
+ul.points li{padding:3px 0 3px 22px;position:relative}
+ul.points li::before{content:"—";position:absolute;left:0;color:var(--acc2)}
+.margin-note{font-size:13.5px;color:var(--dim);border-left:3px solid var(--rule);
+  padding:4px 0 4px 14px;margin:14px 0}
+
+video{width:100%;display:block;background:#000}
+.videoframe{border:1px solid var(--ink);box-shadow:6px 6px 0 var(--rule);margin:18px 0}
+.videoframe .cap{font-size:13px;color:var(--dim);padding:8px 12px;border-top:1px solid var(--rule);background:#fffdf8}
+.ytbox{position:relative;padding-top:56.25%;background:#111}
+.ytbox iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+
+.pending{border:1.5px dashed var(--acc2);background:#fdf6ef;padding:14px 18px;font-size:14px;color:#7a4a1d;margin:16px 0}
+
+.chapbtns{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.chapbtns button{font:inherit;font-size:13.5px;padding:6px 14px;background:#fffdf8;
+  border:1px solid var(--ink);cursor:pointer;box-shadow:2px 2px 0 var(--rule)}
+.chapbtns button:hover{background:var(--mark)}
+.chapbtns button:active{box-shadow:none;transform:translate(2px,2px)}
+
+/* ── 失敗路徑 ── */
+.fail{border:1.5px solid var(--acc2);background:#fdf3ec;padding:4px 22px 10px;margin:16px 0}
+.fail h3{color:var(--acc2)}
+.fail .step{font-size:14.5px;margin:8px 0}
+.fail .step b{font-weight:700}
+
+/* ── 搜尋 ── */
+#q{font:inherit;width:100%;padding:11px 14px;border:1.5px solid var(--ink);
+  background:#fffdf8;font-size:16px}
+#q:focus{outline:2px solid var(--acc)}
+#hits{margin-top:14px;max-height:430px;overflow-y:auto;border-top:1px solid var(--rule)}
+.hit{padding:9px 4px;border-bottom:1px dotted var(--rule);font-size:14.5px;display:flex;gap:12px}
+.hit .ts{flex:0 0 118px;color:var(--dim);font-size:12.5px;font-variant-numeric:tabular-nums;padding-top:2px}
+.hit .ts a{display:block}
+.hit mark{background:var(--mark);padding:0 1px}
+.hint{font-size:13px;color:var(--dim);margin-top:8px}
+
+.calcframe{border:1px solid var(--ink);box-shadow:6px 6px 0 var(--rule);margin:18px 0}
+.calcframe iframe{width:100%;height:900px;border:0;display:block;background:#fff}
+
+table.res{width:100%;border-collapse:collapse;font-size:14.5px;margin:12px 0}
+table.res td{padding:7px 10px;border-bottom:1px dotted var(--rule);vertical-align:top}
+table.res td:first-child{white-space:nowrap;font-weight:700;width:140px}
+
+footer{border-top:3px double var(--ink);margin-top:70px;padding-top:18px;
+  font-size:13.5px;color:var(--dim)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav>
+  <div class="t">目 次</div>
+  <a href="#top">課程總覽</a>
+  <a href="#highlight">三分鐘精華</a>
+  <a href="#chapters">課程五章</a>
+  <a class="sub" href="#ch1">一、資源與公開平台</a>
+  <a class="sub" href="#ch2">二、指尖陀螺案例</a>
+  <a class="sub" href="#ch3">三、3D列印→雷切</a>
+  <a class="sub" href="#ch4">四、板件與組合件</a>
+  <a class="sub" href="#ch5">五、格狀鉸鏈</a>
+  <a href="#fails">失敗路徑</a>
+  <a href="#calc">互動實作:鉸鏈計算器</a>
+  <a href="#search">逐字稿全文搜尋</a>
+  <a href="#refs">延伸資源</a>
+</nav>
+<main id="top">
+
+<header class="mast">
+  <div class="kicker">教師研習.課程紀錄站</div>
+  <h1>雷射切割機在專題上的應用</h1>
+  <div class="meta">2026 年 7 月 7 日.主講 <b>趙珩宇</b>.全程 <b>4 小時 54 分</b> 螢幕錄影
+    → 精華 <b>3 分</b>/操作示範 <b>72 分</b>/完整複習 <b>4:21</b>.逐字稿 <b>4,805</b> 句可搜尋</div>
+</header>
+
+<section id="highlight">
+  <h2><span class="no">00</span>三分鐘看完一整天</h2>
+  <p class="lead">先看效果,再進章節:一天的研習,從「去哪裡找靈感」到「畫出一張能直接送進雷射切割機的圖」。</p>
+  <div class="videoframe">
+    <video src="media/highlight.mp4" controls preload="metadata"></video>
+    <div class="cap">研習精華(3:00)——旁白+三段現場原音;0:40 公開資源/1:11 核心觀念/1:54 格狀鉸鏈</div>
+  </div>
+</section>
+
+<section id="chapters">
+  <h2><span class="no">01–05</span>課程五章</h2>
+  <div id="ytmain"></div>
+  <div class="chapbtns" id="chapjump"></div>
+  <div class="margin-note">完整複習版(4:21:31)適合回家逐段重看;<span id="mergednote">操作示範版(72 分)只保留畫面有動作的段落,適合快速回顧步驟。</span></div>
+
+  <h3 id="ch1">一、課程資源與公開平台<span style="color:var(--dim);font-weight:400;font-size:13px">(0:00:00 起)</span></h3>
+  <ul class="points">
+    <li>從課本作者的網站與著作出發,建立「一步一步操作說明」的自學入口</li>
+    <li><b>Thingiverse</b>:數百萬個開放下載的 3D/雷切設計,搜尋即得</li>
+    <li><b>Instructables</b>:從切割到組裝的完整專題教學(例:穿越機機架)</li>
+    <li><b>Onshape 公開文件</b>與 <b>FRC</b> 隊伍資料:別人畫好、組好的模型直接開來研究</li>
+    <li><b>SolidWorks</b> 教學資源一整面牆——工具不只一套,資源都找得到</li>
+  </ul>
+
+  <h3 id="ch2">二、案例:指尖陀螺設計<span style="color:var(--dim);font-weight:400;font-size:13px">(0:47:06 起)</span></h3>
+  <ul class="points">
+    <li>用一個小案例走完「看別人的設計 → 拆解機構 → 改成自己的」流程</li>
+    <li>搜尋各種指尖陀螺:三葉、變形、LED 手轉輪——觀察軸承配置與外形變化</li>
+    <li>順帶盤點電子零件資源:感測器、邏輯元件、示波器等儀器哪裡找</li>
+  </ul>
+
+  <h3 id="ch3">三、Onshape:從 3D 列印到雷射切割<span style="color:var(--dim);font-weight:400;font-size:13px">(1:34:04 起)</span></h3>
+  <ul class="points">
+    <li>Onshape 開檔、開別人的公開模型、轉一轉、認識介面</li>
+    <li><b>本日核心觀念:「今天所有概念都不一樣——我要從 3D 列印,變成雷射切割。」</b></li>
+    <li>3D 列印是「長出立體」;雷切是「平面板件的組合」——同一個設計,兩種拆法</li>
+    <li>手邊沒有圖?量實物:卡尺量中心軸距、孔徑,就能開始畫</li>
+  </ul>
+
+  <h3 id="ch4">四、板件繪製與組合件<span style="color:var(--dim);font-weight:400;font-size:13px">(2:10:58 起)</span></h3>
+  <ul class="points">
+    <li>底板 A:草圖 → 中心圓 → 長孔開槽,零件逐一命名管理</li>
+    <li>組合件裡對位、鎖定,螢幕上先看到成品再切</li>
+    <li>「線擠出挖孔」與「畫物件再布林」是兩種不同的思路,依情境選</li>
+  </ul>
+
+  <h3 id="ch5">五、格狀鉸鏈與進階應用<span style="color:var(--dim);font-weight:400;font-size:13px">(3:09:42 起)</span></h3>
+  <ul class="points">
+    <li><b>格狀鉸鏈(lattice hinge)</b>:在平板上切規律縫隙,讓硬板材彎出弧度</li>
+    <li>直線格柵、波浪、蜂巢……不同切縫樣式=不同的柔軟度與強度</li>
+    <li>抓現成設計 → 調整到自己的尺寸 → 常用 3mm 圓孔做定位判斷</li>
+    <li>材料有講究:密迪板適合;壓克力見下方「失敗路徑」</li>
+  </ul>
+</section>
+
+<section id="fails">
+  <h2><span class="no">✗</span>失敗路徑——講師親身踩過的</h2>
+  <p>失敗經驗是課程的一部分。這三條路走不通,原因值得記住:</p>
+  <div class="fail">
+    <h3>壓克力做格狀鉸鏈 → 斷</h3>
+    <p class="step"><b>嘗試:</b>把格狀鉸鏈的切縫樣式直接用在壓克力上。<br>
+    <b>失敗:</b>彎曲時「會產生第二個方向的形變」,脆性材料承受不了扭轉,裂開。<br>
+    <b>改用:</b>密迪板等木質板材;壓克力回歸它本身的加工方式(熱彎)。<br>
+    <b>學到:</b>柔性結構的可行性取決於材料的扭轉容忍度,不是幾何畫得出來就切得出來。</p>
+  </div>
+  <div class="fail">
+    <h3>先找現成模型 → 半小時找不到</h3>
+    <p class="step"><b>嘗試:</b>做專題前先上平台找別人畫好的模型。<br>
+    <b>失敗:</b>「今天花了半個小時,找不到,實在是……」——冷門零件常常就是沒有。<br>
+    <b>改用:</b>拿卡尺量實物(中心軸距 5.9mm、邊距 7.8mm),自己畫反而快。<br>
+    <b>學到:</b>找資源設停損時間;量測繪圖是保底能力,課堂上要教。</p>
+  </div>
+  <div class="fail">
+    <h3>雲端 CAD 的等待時間</h3>
+    <p class="step"><b>嘗試:</b>課堂上即時開 Onshape 大型組合件示範。<br>
+    <b>失敗:</b>模型載入轉圈數十秒,全班盯著空白畫面(剪輯時這些畫面還騙過了自動選鏡)。<br>
+    <b>改用:</b>上課前先開好分頁;示範文件拆小;等待時間拿來講觀念。<br>
+    <b>學到:</b>雲端工具的網路成本要排進教案節奏。</p>
+  </div>
+</section>
+
+<section id="calc">
+  <h2><span class="no">⚙</span>互動實作:格狀鉸鏈計算器</h2>
+  <p>第五章講的格狀鉸鏈,參數(切縫長、間距、連桿數)決定了能彎多少度。
+  這個計算器用 Fenner 扭轉連桿模型,輸入板厚與目標弧度,直接產生可下載的 DXF 切割圖:</p>
+  <div class="calcframe"><iframe src="https://henrychao521.github.io/lattice-hinge-designer/" loading="lazy" title="格狀鉸鏈設計計算器"></iframe></div>
+  <p class="hint">獨立開啟:<a href="https://henrychao521.github.io/lattice-hinge-designer/" target="_blank" rel="noopener">henrychao521.github.io/lattice-hinge-designer</a></p>
+</section>
+
+<section id="search">
+  <h2><span class="no">🔍</span>逐字稿全文搜尋</h2>
+  <p>輸入關鍵詞,在 4,805 句課程逐字稿裡找講到的段落(whisper 自動轉寫,未逐句人工校對):</p>
+  <input id="q" type="search" placeholder="試試:雷射、草圖、尺寸、馬達、壓克力、匯出…">
+  <div id="hits"></div>
+  <p class="hint" id="searchhint"></p>
+</section>
+
+<section id="refs">
+  <h2><span class="no">→</span>延伸資源</h2>
+  <table class="res">
+    <tr><td>Thingiverse</td><td><a href="https://www.thingiverse.com" target="_blank" rel="noopener">thingiverse.com</a> — 開放 3D/雷切設計庫,課程第一站</td></tr>
+    <tr><td>Instructables</td><td><a href="https://www.instructables.com" target="_blank" rel="noopener">instructables.com</a> — 完整專題教學;搜「lattice hinge」「curved laser bent wood」</td></tr>
+    <tr><td>Onshape</td><td><a href="https://www.onshape.com" target="_blank" rel="noopener">onshape.com</a> — 雲端 CAD,教育帳號免費;公開文件可直接開</td></tr>
+    <tr><td>Tinkercad Circuits</td><td><a href="https://www.tinkercad.com" target="_blank" rel="noopener">tinkercad.com</a> — 電路先模擬再上實體(第四章示範)</td></tr>
+    <tr><td>鉸鏈計算器</td><td><a href="https://henrychao521.github.io/lattice-hinge-designer/" target="_blank" rel="noopener">lattice-hinge-designer</a> — 本站互動實作單元</td></tr>
+    <tr><td>更多教學平台</td><td><a href="https://henrychao521.github.io/" target="_blank" rel="noopener">henrychao521.github.io</a> — 線鋸機平台、PC13110、工程地景等 20+ 教具</td></tr>
+  </table>
+</section>
+
+<footer>
+  <p>課程紀錄:2026-07-07 教師研習「雷射切割機在專題上的應用」.主講/素材:趙珩宇(Henry Chao)</p>
+  <p>本站三版影片與逐字稿由 AI 影片管線自動產出(VLM 素材盤點 → whisper 逐字稿剪輯 → 自動字幕與出口 QC),
+  對外影片已完成臉部遮罩處理。</p>
+</footer>
+
+</main>
+</div>
+
+<script src="data/config.js"></script>
+<script src="data/chapters.js"></script>
+<script src="data/transcript.js"></script>
+<script>
+const $ = s => document.querySelector(s);
+const fmt = t => { t=Math.max(0,Math.round(t)); const h=t/3600|0,m=t%3600/60|0,s=t%60;
+  return (h? h+":"+String(m).padStart(2,"0") : m) + ":" + String(s).padStart(2,"0"); };
+
+// ── 完整版 YouTube 播放器與章節跳轉 ──
+const hasYT = typeof YT_IDS!=="undefined" && YT_IDS.full;
+if(hasYT){
+  $("#ytmain").innerHTML = `<div class="videoframe"><div class="ytbox">
+    <iframe id="ytif" src="https://www.youtube.com/embed/${YT_IDS.full}" title="完整複習版"
+      allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe>
+    </div><div class="cap">完整複習版(4:21:31)——五節章卡,已剪除長靜默</div></div>`;
+  $("#chapjump").innerHTML = CHAPTERS.map(c=>
+    `<button onclick="seek(${c.full_start})">${"一二三四五"[c.n-1]}、${c.title}(${fmt(c.full_start)})</button>`).join("");
+  if(YT_IDS.merged) $("#mergednote").innerHTML =
+    `<a href="https://youtu.be/${YT_IDS.merged}" target="_blank" rel="noopener">操作示範版(72 分)</a> 只保留畫面有動作的段落,適合快速回顧步驟。`;
+}else{
+  $("#ytmain").innerHTML = `<div class="pending"><b>影片上架中。</b>完整複習版(4:21:31)與操作示範版(72 分)
+    將以 YouTube(未列出)提供——上傳後把影片 ID 填入 <code>data/config.js</code> 即自動啟用章節跳轉與逐字稿深連結。</div>`;
+}
+function seek(t){ const f=$("#ytif"); if(!f) return;
+  f.src = `https://www.youtube.com/embed/${YT_IDS.full}?start=${Math.floor(t)}&autoplay=1`;
+  f.scrollIntoView({behavior:"smooth",block:"center"}); }
+
+// ── 逐字稿搜尋 ──
+const CHN = ["","一","二","三","四","五"];
+let timer=null;
+$("#q").addEventListener("input", e=>{ clearTimeout(timer);
+  timer=setTimeout(()=>run(e.target.value.trim()),160); });
+function esc(s){return s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function run(q){
+  const box=$("#hits"), hint=$("#searchhint");
+  box.innerHTML=""; hint.textContent="";
+  if(q.length<2) return;
+  const hits=TRANSCRIPT.filter(r=>r.x.includes(q)).slice(0,200);
+  hint.textContent = hits.length ? `${hits.length} 筆(最多顯示 200)` : "沒有找到——換個寫法試試(逐字稿為自動轉寫)";
+  box.innerHTML = hits.map(r=>{
+    const link = (hasYT && r.f!=null)
+      ? `<a href="javascript:void(0)" onclick="seek(${r.f})">▶ ${fmt(r.f)}</a>`
+      : `第${CHN[r.c]}章 ${fmt(r.t)}`;
+    return `<div class="hit"><div class="ts">${link}</div><div>${esc(r.x).replaceAll(esc(q),`<mark>${esc(q)}</mark>`)}</div></div>`;
+  }).join("");
+}
+</script>
+</body>
+</html>
