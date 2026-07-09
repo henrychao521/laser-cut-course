@@ -207,6 +207,7 @@ footer{border-top:3px double var(--ink);margin-top:70px;padding-top:18px;
     <li><b>雷切專案資源</b>:Thingiverse 上整批「全雷射切割」專案,切割檔直接下載直接切</li>
     <li><b>燈光收尾</b>:LED 燈條/燈光棒與雷切件結合,作品從「會動」進化到「會亮」</li>
     <li><b>給學生的視野</b>:雷射切割機不只是切名牌——從機構、電控到燈光,都是同一台機器的專題語彙</li>
+    <li><b>成品程式碼</b>:<a href="tools/0709_kinetic_device.ino" download>0709_kinetic_device.ino</a>——當日裝置完整韌體(tone() 旋律+多伺服非阻塞控制),旋律可用下方「單體作曲台」自行改編</li>
   </ul>
 </section>
 
@@ -253,6 +254,9 @@ footer{border-top:3px double var(--ink);margin-top:70px;padding-top:18px;
   <p class="hint">獨立開啟:<a href="tools/buzzer-composer.html" target="_blank" rel="noopener">單體作曲台</a>
   .範例程式:<a href="tools/tone_melody_template.ino" download>tone_melody_template.ino</a>
   (接線:單體(+) ─ 100~220Ω ─ D2,單體(-) ─ GND;適用 Uno / LinkIt 7697)</p>
+  <div class="margin-note"><b>研習成品完整程式</b>:<a href="tools/0709_kinetic_device.ino" download>0709_kinetic_device.ino</a>
+  ——第二天成品「雷切音樂動態裝置」的實際韌體:三顆掃動伺服 + 連續旋轉伺服 + 單體播放「梅岡寄情」(315021 同學譜曲)+ LED,
+  全程 <code>millis()</code> 非阻塞式寫法,音樂、伺服、燈互不卡頓;已移除 MP3 模組,單體直接接 D2。</div>
 </section>
 
 <section id="search">
