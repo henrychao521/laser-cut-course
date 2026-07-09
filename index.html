@@ -111,6 +111,7 @@ footer{border-top:3px double var(--ink);margin-top:70px;padding-top:18px;
   <a class="sub" href="#ch5">五、格狀鉸鏈</a>
   <a href="#fails">失敗路徑</a>
   <a href="#calc">互動實作:鉸鏈計算器</a>
+  <a href="#composer">互動實作:單體作曲台</a>
   <a href="#search">逐字稿全文搜尋</a>
   <a href="#refs">延伸資源</a>
 </nav>
@@ -214,6 +215,17 @@ footer{border-top:3px double var(--ink);margin-top:70px;padding-top:18px;
   <p class="hint">獨立開啟:<a href="https://henrychao521.github.io/lattice-hinge-designer/" target="_blank" rel="noopener">henrychao521.github.io/lattice-hinge-designer</a></p>
 </section>
 
+<section id="composer">
+  <h2><span class="no">♪</span>互動實作:單體作曲台</h2>
+  <p>雷切完的動態裝置要會唱歌:把 MP3 模組省下來,喇叭單體直接接開發板,用 Arduino 的
+  <code>tone()</code> 播旋律。在下面的鋼琴鍵盤上按出旋律(逐鍵點按或即時彈奏都可以,
+  音色就是單體的方波),按「複製代碼」,貼進範例程式就完成了:</p>
+  <div class="calcframe"><iframe src="tools/buzzer-composer.html" loading="lazy" style="height:1250px" title="單體作曲台 — tone() 旋律產生器"></iframe></div>
+  <p class="hint">獨立開啟:<a href="tools/buzzer-composer.html" target="_blank" rel="noopener">單體作曲台</a>
+  .範例程式:<a href="tools/tone_melody_template.ino" download>tone_melody_template.ino</a>
+  (接線:單體(+) ─ 100~220Ω ─ D2,單體(-) ─ GND;適用 Uno / LinkIt 7697)</p>
+</section>
+
 <section id="search">
   <h2><span class="no">🔍</span>逐字稿全文搜尋</h2>
   <p>輸入關鍵詞,在 4,805 句課程逐字稿裡找講到的段落(whisper 自動轉寫,未逐句人工校對):</p>
@@ -232,6 +244,7 @@ footer{border-top:3px double var(--ink);margin-top:70px;padding-top:18px;
     <tr><td>Onshape</td><td><a href="https://www.onshape.com" target="_blank" rel="noopener">onshape.com</a> — 雲端 CAD,教育帳號免費;公開文件可直接開</td></tr>
     <tr><td>Tinkercad Circuits</td><td><a href="https://www.tinkercad.com" target="_blank" rel="noopener">tinkercad.com</a> — 電路先模擬再上實體(第四章示範)</td></tr>
     <tr><td>鉸鏈計算器</td><td><a href="https://henrychao521.github.io/lattice-hinge-designer/" target="_blank" rel="noopener">lattice-hinge-designer</a> — 本站互動實作單元</td></tr>
+    <tr><td>單體作曲台</td><td><a href="tools/buzzer-composer.html" target="_blank" rel="noopener">tone() 旋律產生器</a> — 鋼琴鍵盤作曲直接產生 MELODY 陣列;搭配<a href="tools/tone_melody_template.ino" download>範例程式</a>讓雷切裝置發聲</td></tr>
     <tr><td>Onshape 範例庫</td><td><a href="https://cad.onshape.com/documents/c59810e620699f2efd345833" target="_blank" rel="noopener">雷切研習範例庫(公開文件)</a> — 課程範例重建:底板 A(Ø85/長孔/定位孔)、格狀鉸鏈示範板,可直接複製跟做</td></tr>
     <tr><td>scan2lasercut</td><td><a href="https://github.com/henrychao521/scan2cad" target="_blank" rel="noopener">scan2cad R4</a> — 本課概念的自動化延伸:3D 掃描教室家具 → 自動拆板件出 DXF 切縮尺模型</td></tr>
     <tr><td>更多教學平台</td><td><a href="https://henrychao521.github.io/" target="_blank" rel="noopener">henrychao521.github.io</a> — 線鋸機平台、PC13110、工程地景等 20+ 教具</td></tr>

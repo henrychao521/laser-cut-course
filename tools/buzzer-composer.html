@@ -1,0 +1,382 @@
+<title>單體作曲台 — tone() 旋律產生器</title>
+<style>
+:root{
+  --bg:#EEF1F2; --surface:#FFFFFF; --surface2:#E3E9EA; --ink:#1C2B2D; --muted:#5C6B6E;
+  --accent:#0F766E; --accent-ink:#FFFFFF; --accent-soft:#0F766E22;
+  --rec:#DC2626; --line:#CBD5D6;
+  --wkey:#FCFDFD; --wkey-edge:#B9C4C6; --bkey:#233335; --key-active:#2AA79A;
+  --code-bg:#132022; --code-ink:#C7E5DE;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#10191B; --surface:#182427; --surface2:#1F2E31; --ink:#E6EDEA; --muted:#8AA0A0;
+    --accent:#35B8A6; --accent-ink:#0C1517; --accent-soft:#35B8A622;
+    --rec:#F87171; --line:#2C3E41;
+    --wkey:#DCE4E4; --wkey-edge:#9AAAAB; --bkey:#0C1517; --key-active:#35B8A6;
+    --code-bg:#0C1517; --code-ink:#9FD8CD;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#10191B; --surface:#182427; --surface2:#1F2E31; --ink:#E6EDEA; --muted:#8AA0A0;
+  --accent:#35B8A6; --accent-ink:#0C1517; --accent-soft:#35B8A622;
+  --rec:#F87171; --line:#2C3E41;
+  --wkey:#DCE4E4; --wkey-edge:#9AAAAB; --bkey:#0C1517; --key-active:#35B8A6;
+  --code-bg:#0C1517; --code-ink:#9FD8CD;
+}
+:root[data-theme="light"]{
+  --bg:#EEF1F2; --surface:#FFFFFF; --surface2:#E3E9EA; --ink:#1C2B2D; --muted:#5C6B6E;
+  --accent:#0F766E; --accent-ink:#FFFFFF; --accent-soft:#0F766E22;
+  --rec:#DC2626; --line:#CBD5D6;
+  --wkey:#FCFDFD; --wkey-edge:#B9C4C6; --bkey:#233335; --key-active:#2AA79A;
+  --code-bg:#132022; --code-ink:#C7E5DE;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"PingFang TC","Noto Sans TC",system-ui,sans-serif;font-size:15px;line-height:1.55}
+.wrap{max-width:1080px;margin:0 auto;padding:20px 16px 60px}
+header{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+.eyebrow{font-size:12px;letter-spacing:.18em;color:var(--accent);font-weight:600}
+h1{font-family:"Avenir Next Condensed","Arial Narrow","PingFang TC",sans-serif;
+  font-size:30px;font-weight:700;letter-spacing:.04em;margin:0}
+.sub{color:var(--muted);font-size:13px;margin:2px 0 16px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:14px}
+.panel h2{font-size:13px;letter-spacing:.14em;color:var(--muted);font-weight:600;margin:0 0 10px;text-transform:uppercase}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+button{font:inherit;cursor:pointer;border-radius:8px;border:1px solid var(--line);
+  background:var(--surface2);color:var(--ink);padding:7px 14px}
+button:hover{border-color:var(--accent)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+button.active{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+button.rec-on{background:var(--rec);border-color:var(--rec);color:#fff;font-weight:600}
+button:disabled{opacity:.45;cursor:default}
+label.field{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted)}
+input[type=number]{font:inherit;width:70px;padding:6px 8px;border-radius:8px;
+  border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{border:0;border-radius:0;background:var(--surface)}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button.active{background:var(--accent);color:var(--accent-ink)}
+.hint{font-size:12.5px;color:var(--muted)}
+/* piano */
+.piano-scroll{overflow-x:auto;padding-bottom:6px}
+.piano{position:relative;height:170px;user-select:none;touch-action:none;width:max-content}
+.wk{position:absolute;top:0;width:42px;height:170px;background:var(--wkey);
+  border:1px solid var(--wkey-edge);border-radius:0 0 6px 6px;cursor:pointer}
+.bk{position:absolute;top:0;width:26px;height:104px;background:var(--bkey);
+  border-radius:0 0 5px 5px;cursor:pointer;z-index:2;border:1px solid var(--bkey)}
+.wk.on,.bk.on{background:var(--key-active)}
+.klabel{position:absolute;bottom:6px;width:100%;text-align:center;font-size:10.5px;color:var(--muted);pointer-events:none}
+.bk .klabel{color:#cfd8d8;bottom:5px}
+.kbd-hint{position:absolute;bottom:22px;width:100%;text-align:center;font-size:10px;color:var(--accent);pointer-events:none;font-family:ui-monospace,monospace}
+.bk .kbd-hint{color:var(--key-active)}
+.bk.on .kbd-hint{color:var(--accent-ink)}
+/* two-column work area */
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:820px){.cols{grid-template-columns:1fr}}
+/* sequence chips */
+.seq{display:flex;flex-wrap:wrap;gap:6px;min-height:56px;align-content:flex-start}
+.chip{display:inline-flex;align-items:center;gap:6px;background:var(--surface2);
+  border:1px solid var(--line);border-radius:7px;padding:3px 6px 3px 9px;font-size:13px;
+  font-variant-numeric:tabular-nums}
+.chip.rest{opacity:.62;font-style:italic}
+.chip.playing{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.chip .ms{color:var(--muted);font-size:11.5px}
+.chip.playing .ms{color:var(--accent-ink)}
+.chip .del{border:0;background:none;padding:0 3px;color:var(--muted);font-size:14px;line-height:1;border-radius:4px}
+.chip .del:hover{color:var(--rec)}
+.chip.playing .del{color:var(--accent-ink)}
+.seq-empty{color:var(--muted);font-size:13px;padding:14px 4px}
+.stat{font-size:12.5px;color:var(--muted);margin-top:10px;font-variant-numeric:tabular-nums}
+/* code */
+pre{background:var(--code-bg);color:var(--code-ink);border-radius:8px;padding:12px;
+  font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:12px;line-height:1.5;
+  overflow:auto;max-height:340px;margin:0}
+.codebar{display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap}
+.copied{color:var(--accent);font-size:12.5px;font-weight:600;opacity:0;transition:opacity .2s}
+.copied.show{opacity:1}
+details{margin-top:12px}
+summary{cursor:pointer;font-size:13px;color:var(--muted)}
+textarea{width:100%;height:90px;font-family:ui-monospace,monospace;font-size:12px;margin-top:8px;
+  background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+<header>
+  <div>
+    <div class="eyebrow">0707 · TONE() 旋律產生器</div>
+    <h1>單體作曲台</h1>
+  </div>
+</header>
+<p class="sub">按琴鍵作曲（音色即為單體方波），完成後複製代碼，貼進 tone() 範例程式取代 MELODY 陣列。內容會自動存在這台電腦的瀏覽器裡。</p>
+
+<div class="panel">
+  <h2>輸入方式</h2>
+  <div class="controls">
+    <div class="seg" role="tablist">
+      <button id="modeStep" class="active">點按輸入</button>
+      <button id="modeLive">即時彈奏</button>
+    </div>
+    <span id="stepCtrls" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <label class="field">BPM <input type="number" id="bpm" value="100" min="30" max="240"></label>
+      <div class="seg" id="durSeg">
+        <button data-beats="0.25">16分</button>
+        <button data-beats="0.5">8分</button>
+        <button data-beats="1" class="active">4分</button>
+        <button data-beats="2">2分</button>
+        <button data-beats="4">全音符</button>
+      </div>
+      <button id="dotBtn" title="時值 ×1.5">附點</button>
+      <button id="restBtn">＋休止符</button>
+    </span>
+    <span id="liveCtrls" style="display:none;gap:10px;flex-wrap:wrap;align-items:center">
+      <button id="recBtn" class="primary">● 開始錄製</button>
+      <span class="hint">按多久、音就多長；放開後的空檔自動變休止符。錄的內容會接在序列後面。</span>
+    </span>
+  </div>
+</div>
+
+<div class="panel">
+  <h2>鍵盤 C3 – C6</h2>
+  <div class="piano-scroll"><div class="piano" id="piano"></div></div>
+  <p class="hint">滑鼠／觸控直接按，或用電腦鍵盤：Z 排＝中央八度（Z=C4、S=C#4…），Q 排＝高八度（Q=C5…）。<span id="octHint"></span></p>
+</div>
+
+<div class="cols">
+  <div class="panel">
+    <h2>音符序列</h2>
+    <div class="controls" style="margin-bottom:10px">
+      <button id="playBtn" class="primary">▶ 試聽整首</button>
+      <button id="undoBtn">復原一步</button>
+      <button id="clearBtn">全部清除</button>
+    </div>
+    <div class="seq" id="seq"></div>
+    <div class="stat" id="stat"></div>
+    <details>
+      <summary>貼上舊代碼繼續編輯</summary>
+      <textarea id="importBox" placeholder="貼上 { 392, 500 }, { 0, 250 }, ... 形式的內容（整段 MELODY 陣列也可以）"></textarea>
+      <div class="controls" style="margin-top:8px">
+        <button id="importBtn">匯入（接在後面）</button>
+        <button id="importReplaceBtn">匯入（取代全部）</button>
+        <span class="hint" id="importMsg"></span>
+      </div>
+    </details>
+  </div>
+
+  <div class="panel">
+    <h2>產出代碼</h2>
+    <div class="codebar">
+      <button id="copyBtn" class="primary">複製代碼</button>
+      <span class="copied" id="copiedMsg">已複製 ✓</span>
+      <span class="hint">貼進 .ino，取代原本 NOTE_COUNT 與 MELODY 兩段。</span>
+    </div>
+    <pre id="code"></pre>
+  </div>
+</div>
+</div>
+
+<script>
+'use strict';
+// ---------- data ----------
+const NAMES=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+const LOW=48, HIGH=84; // C3..C6
+const freqOf=m=>Math.round(440*Math.pow(2,(m-69)/12));
+const nameOf=m=>NAMES[m%12]+(Math.floor(m/12)-1);
+let seq=[];            // [{f:Hz(0=rest), ms, label}]
+let history=[];        // snapshots for undo
+const $=id=>document.getElementById(id);
+
+try{ const s=localStorage.getItem('buzzerSeq'); if(s) seq=JSON.parse(s); }catch(e){}
+
+function snapshot(){ history.push(JSON.stringify(seq)); if(history.length>200) history.shift(); }
+function save(){ try{ localStorage.setItem('buzzerSeq', JSON.stringify(seq)); }catch(e){} }
+
+// ---------- audio ----------
+let ctx=null, liveOsc=null, liveGain=null;
+function audio(){ if(!ctx) ctx=new (window.AudioContext||window.webkitAudioContext)(); if(ctx.state==='suspended') ctx.resume(); return ctx; }
+function noteOn(f){
+  const a=audio(); noteOff();
+  liveOsc=a.createOscillator(); liveGain=a.createGain();
+  liveOsc.type='square'; liveOsc.frequency.value=f;
+  liveGain.gain.value=0.18;
+  liveOsc.connect(liveGain).connect(a.destination); liveOsc.start();
+}
+function noteOff(){
+  if(liveOsc){ try{liveOsc.stop();}catch(e){} liveOsc.disconnect(); liveGain.disconnect(); liveOsc=null; }
+}
+
+// ---------- piano ----------
+const piano=$('piano');
+const KMAP={z:60,s:61,x:62,d:63,c:64,v:65,g:66,b:67,h:68,n:69,j:70,m:71,',':72,
+            q:72,'2':73,w:74,'3':75,e:76,r:77,'5':78,t:79,'6':80,y:81,'7':82,u:83,i:84};
+const keyEls={};
+(function build(){
+  const WK=42;
+  let wx=0;
+  const whites=[],blacks=[];
+  for(let m=LOW;m<=HIGH;m++){
+    const pc=m%12, isB=[1,3,6,8,10].includes(pc);
+    if(!isB){ whites.push({m,x:wx}); wx+=WK; }
+    else blacks.push({m,x:wx-13});
+  }
+  piano.style.width=wx+'px';
+  const kbdFor=m=>{ const k=Object.keys(KMAP).find(k=>KMAP[k]===m); return k?k.toUpperCase():''; };
+  for(const w of whites){
+    const d=document.createElement('div');
+    d.className='wk'; d.style.left=w.x+'px'; d.dataset.m=w.m;
+    d.innerHTML=(kbdFor(w.m)?'<div class="kbd-hint">'+kbdFor(w.m)+'</div>':'')+
+      (w.m%12===0?'<div class="klabel">'+nameOf(w.m)+'</div>':'');
+    piano.appendChild(d); keyEls[w.m]=d;
+  }
+  for(const b of blacks){
+    const d=document.createElement('div');
+    d.className='bk'; d.style.left=b.x+'px'; d.dataset.m=b.m;
+    if(kbdFor(b.m)) d.innerHTML='<div class="kbd-hint">'+kbdFor(b.m)+'</div>';
+    piano.appendChild(d); keyEls[b.m]=d;
+  }
+})();
+
+// ---------- modes ----------
+let mode='step', dotted=false, beats=1;
+$('modeStep').onclick=()=>setMode('step');
+$('modeLive').onclick=()=>setMode('live');
+function setMode(m){
+  mode=m;
+  $('modeStep').classList.toggle('active',m==='step');
+  $('modeLive').classList.toggle('active',m==='live');
+  $('stepCtrls').style.display=m==='step'?'flex':'none';
+  $('liveCtrls').style.display=m==='live'?'flex':'none';
+  if(m!=='live'&&recording) stopRec();
+}
+for(const b of $('durSeg').children)
+  b.onclick=()=>{ beats=parseFloat(b.dataset.beats);
+    for(const x of $('durSeg').children) x.classList.toggle('active',x===b); };
+$('dotBtn').onclick=()=>{ dotted=!dotted; $('dotBtn').classList.toggle('active',dotted); };
+const stepMs=()=>Math.round(60000/(+$('bpm').value||100)*beats*(dotted?1.5:1));
+$('restBtn').onclick=()=>{ snapshot(); seq.push({f:0,ms:stepMs(),label:'休止'}); save(); render(); };
+
+// ---------- key press handling ----------
+let recording=false, recLastEnd=0, downInfo=null; // {m, t}
+function press(m){
+  const f=freqOf(m);
+  keyEls[m].classList.add('on');
+  if(mode==='live'&&recording){
+    const now=performance.now();
+    if(downInfo) release(downInfo.m); // monophonic: new key ends previous
+    if(recLastEnd&&now-recLastEnd>60){ seq.push({f:0,ms:Math.round(now-recLastEnd),label:'休止'}); }
+    downInfo={m,t:now};
+  } else downInfo={m,t:performance.now(),preview:true};
+  noteOn(f); // after release() above, so the previous note's noteOff can't kill this one
+}
+function release(m){
+  if(keyEls[m]) keyEls[m].classList.remove('on');
+  if(!downInfo||downInfo.m!==m) { if(!downInfo) noteOff(); return; }
+  noteOff();
+  const now=performance.now();
+  if(mode==='live'&&recording){
+    const ms=Math.max(80,Math.round(now-downInfo.t));
+    seq.push({f:freqOf(m),ms,label:nameOf(m)});
+    recLastEnd=now; save(); render();
+  } else if(mode==='step'){
+    snapshot(); seq.push({f:freqOf(m),ms:stepMs(),label:nameOf(m)}); save(); render();
+  }
+  downInfo=null;
+}
+piano.addEventListener('pointerdown',e=>{
+  const t=e.target.closest('.wk,.bk'); if(!t) return;
+  e.preventDefault(); press(+t.dataset.m);
+});
+window.addEventListener('pointerup',()=>{ if(downInfo) release(downInfo.m); });
+const heldKeys=new Set();
+window.addEventListener('keydown',e=>{
+  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA') return;
+  const m=KMAP[e.key.toLowerCase()];
+  if(m===undefined||heldKeys.has(e.key)) return;
+  heldKeys.add(e.key); press(m);
+});
+window.addEventListener('keyup',e=>{
+  const m=KMAP[e.key.toLowerCase()];
+  heldKeys.delete(e.key);
+  if(m!==undefined) release(m);
+});
+
+// ---------- record ----------
+$('recBtn').onclick=()=>recording?stopRec():startRec();
+function startRec(){ recording=true; recLastEnd=0; $('recBtn').textContent='■ 停止錄製'; $('recBtn').classList.add('rec-on'); $('recBtn').classList.remove('primary'); snapshot(); }
+function stopRec(){ recording=false; recLastEnd=0; $('recBtn').textContent='● 開始錄製'; $('recBtn').classList.remove('rec-on'); $('recBtn').classList.add('primary'); save(); render(); }
+
+// ---------- sequence render ----------
+function render(){
+  const box=$('seq'); box.innerHTML='';
+  if(!seq.length){ box.innerHTML='<div class="seq-empty">還沒有音符——按上面的琴鍵開始。</div>'; }
+  seq.forEach((n,i)=>{
+    const c=document.createElement('span');
+    c.className='chip'+(n.f?'':' rest'); c.dataset.i=i;
+    c.innerHTML='<b>'+(n.f?n.label:'休止')+'</b><span class="ms">'+n.ms+'ms</span><button class="del" title="刪除" aria-label="刪除">×</button>';
+    c.querySelector('.del').onclick=ev=>{ ev.stopPropagation(); snapshot(); seq.splice(i,1); save(); render(); };
+    c.onclick=()=>{ if(n.f){ noteOn(n.f); setTimeout(noteOff,Math.min(n.ms,400)); } };
+    box.appendChild(c);
+  });
+  const total=seq.reduce((s,n)=>s+n.ms,0);
+  $('stat').textContent=seq.length+' 個項目 ・ 總長 '+(total/1000).toFixed(1)+' 秒';
+  $('code').textContent=genCode();
+}
+function genCode(){
+  if(!seq.length) return '// （序列是空的）';
+  const lines=seq.map(n=>'  {'+String(n.f).padStart(4)+', '+String(n.ms).padStart(5)+'},  // '+(n.f?n.label:'休止'));
+  return 'const int NOTE_COUNT = '+seq.length+';\nconst int MELODY[NOTE_COUNT][2] = {\n'+lines.join('\n')+'\n};';
+}
+
+// ---------- playback ----------
+let playTimer=null;
+$('playBtn').onclick=()=>{ if(playTimer) stopPlay(); else startPlay(); };
+function startPlay(){
+  if(!seq.length) return;
+  audio(); let i=0; $('playBtn').textContent='■ 停止';
+  const step=()=>{
+    document.querySelectorAll('.chip.playing').forEach(c=>c.classList.remove('playing'));
+    if(i>=seq.length){ stopPlay(); return; }
+    const n=seq[i], chip=document.querySelector('.chip[data-i="'+i+'"]');
+    if(chip){ chip.classList.add('playing'); chip.scrollIntoView({block:'nearest'}); }
+    noteOff();
+    if(n.f){ noteOn(n.f); setTimeout(()=>{ if(playTimer) noteOff(); },Math.max(20,n.ms-25)); }
+    i++; playTimer=setTimeout(step,n.ms);
+  };
+  step();
+}
+function stopPlay(){
+  clearTimeout(playTimer); playTimer=null; noteOff();
+  document.querySelectorAll('.chip.playing').forEach(c=>c.classList.remove('playing'));
+  $('playBtn').textContent='▶ 試聽整首';
+}
+
+// ---------- undo / clear ----------
+$('undoBtn').onclick=()=>{ if(!history.length) return; seq=JSON.parse(history.pop()); save(); render(); };
+$('clearBtn').onclick=()=>{ if(!seq.length) return; snapshot(); seq=[]; save(); render(); };
+
+// ---------- copy ----------
+$('copyBtn').onclick=async()=>{
+  try{ await navigator.clipboard.writeText(genCode()); }
+  catch(e){ const ta=document.createElement('textarea'); ta.value=genCode();
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); }
+  $('copiedMsg').classList.add('show'); setTimeout(()=>$('copiedMsg').classList.remove('show'),1600);
+};
+
+// ---------- import ----------
+function doImport(replace){
+  const txt=$('importBox').value;
+  const pairs=[...txt.matchAll(/\{\s*(\d+)\s*,\s*(\d+)\s*\}/g)]
+    .map(m=>{ const f=+m[1], ms=+m[2];
+      let label='休止';
+      if(f>0){ const midi=Math.round(69+12*Math.log2(f/440)); label=nameOf(midi); }
+      return {f,ms,label}; });
+  if(!pairs.length){ $('importMsg').textContent='沒有讀到 {頻率, 毫秒} 格式的內容'; return; }
+  snapshot(); if(replace) seq=pairs; else seq=seq.concat(pairs);
+  save(); render(); $('importMsg').textContent='匯入 '+pairs.length+' 個項目 ✓'; $('importBox').value='';
+}
+$('importBtn').onclick=()=>doImport(false);
+$('importReplaceBtn').onclick=()=>doImport(true);
+
+render();
+</script>
