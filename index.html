@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>雷射切割機在專題上的應用 — 研習課程站</title>
-<meta name="description" content="2026-07-07 教師研習完整紀錄:三版影片、五章講義、全文逐字稿搜尋、格狀鉸鏈互動計算器">
+<meta name="description" content="2026-07-07/09 二日教師研習完整紀錄:設計日+實作日、多版影片、七章講義、全文逐字稿搜尋、格狀鉸鏈互動計算器">
 <style>
 :root{
   --paper:#faf7f1; --ink:#26221c; --dim:#6f675c; --rule:#d8d0c2;
@@ -103,12 +103,15 @@ footer{border-top:3px double var(--ink);margin-top:70px;padding-top:18px;
   <div class="t">目 次</div>
   <a href="#top">課程總覽</a>
   <a href="#highlight">三分鐘精華</a>
-  <a href="#chapters">課程五章</a>
+  <a href="#chapters">第一天.設計(7/7)</a>
   <a class="sub" href="#ch1">一、資源與公開平台</a>
   <a class="sub" href="#ch2">二、指尖陀螺案例</a>
   <a class="sub" href="#ch3">三、3D列印→雷切</a>
   <a class="sub" href="#ch4">四、板件與組合件</a>
   <a class="sub" href="#ch5">五、格狀鉸鏈</a>
+  <a href="#day2">第二天.實作(7/9)</a>
+  <a class="sub" href="#ch6">六、上機實切與電控</a>
+  <a class="sub" href="#ch7">七、齒輪機構與燈光</a>
   <a href="#fails">失敗路徑</a>
   <a href="#calc">互動實作:鉸鏈計算器</a>
   <a href="#composer">互動實作:單體作曲台</a>
@@ -120,8 +123,8 @@ footer{border-top:3px double var(--ink);margin-top:70px;padding-top:18px;
 <header class="mast">
   <div class="kicker">教師研習.課程紀錄站</div>
   <h1>雷射切割機在專題上的應用</h1>
-  <div class="meta">2026 年 7 月 7 日.主講 <b>趙珩宇</b>.全程 <b>4 小時 54 分</b> 螢幕錄影
-    → 精華 <b>3 分</b>/操作示範 <b>72 分</b>/完整複習 <b>4:21</b>.逐字稿 <b>4,805</b> 句可搜尋</div>
+  <div class="meta">2026 年 7 月 7 日(設計)+ 7 月 9 日(實作).主講 <b>趙珩宇</b>.二日共 <b>9 小時</b> 錄影
+    → 精華/操作示範/完整複習多版影片.逐字稿 <b>8,709</b> 句可搜尋</div>
 </header>
 
 <section id="highlight">
@@ -134,7 +137,7 @@ footer{border-top:3px double var(--ink);margin-top:70px;padding-top:18px;
 </section>
 
 <section id="chapters">
-  <h2><span class="no">01–05</span>課程五章</h2>
+  <h2><span class="no">DAY 1</span>第一天.設計(7/7):課程五章</h2>
   <div id="ytmain"></div>
   <div class="chapbtns" id="chapjump"></div>
   <div class="margin-note">完整複習版(4:21:31)適合回家逐段重看;<span id="mergednote">操作示範版(72 分)只保留畫面有動作的段落,適合快速回顧步驟。</span></div>
@@ -178,6 +181,32 @@ footer{border-top:3px double var(--ink);margin-top:70px;padding-top:18px;
     <li>直線格柵、波浪、蜂巢……不同切縫樣式=不同的柔軟度與強度</li>
     <li>抓現成設計 → 調整到自己的尺寸 → 常用 3mm 圓孔做定位判斷</li>
     <li>材料有講究:密迪板適合;壓克力見下方「失敗路徑」</li>
+  </ul>
+</section>
+
+<section id="day2">
+  <h2><span class="no">DAY 2</span>第二天.實作(7/9):學習重點</h2>
+  <p class="lead">第一天把圖畫好,第二天把東西做出來:上機切割、機構組裝、電控接線,到會動、會亮的成品。</p>
+  <div id="ytmain2"></div>
+  <div class="chapbtns" id="chapjump2"></div>
+  <div class="margin-note">第二天全程約 4 小時 8 分;完整複習版(約 3:50)剪除等待段,操作示範版另出。</div>
+
+  <h3 id="ch6">六、上機實作:壓克力、實切與電控接線<span style="color:var(--dim);font-weight:400;font-size:13px">(上午段.2:49:26)</span></h3>
+  <ul class="points">
+    <li><b>壓克力的正確加工</b>:壓克力有自己的彎折方法(加熱彎折,不限板材、管材也行)——不要硬套木板的格狀鉸鏈,呼應第一天的失敗路徑</li>
+    <li><b>實切觀察</b>:切割面上緣與底部的燒灼量不同,混角處是焦面集中的位置——看切面就知道參數對不對</li>
+    <li><b>在地資源</b>:直接用 Google Maps 搜「雷射切割」,找住家附近的代工廠;學校沒機器也能做專題</li>
+    <li><b>螺絲與鎖固</b>:M3 螺絲的尺寸預留、底座架高避開螺絲頭的設計細節</li>
+    <li><b>伺服馬達電控</b>:兩種伺服馬達的辨識(尺寸略異)、馬達內部齒片構造、接線後不動的除錯流程、電池供電注意</li>
+  </ul>
+
+  <h3 id="ch7">七、齒輪機構與燈光作品<span style="color:var(--dim);font-weight:400;font-size:13px">(下午段.1:18:50)</span></h3>
+  <ul class="points">
+    <li><b>齒輪與齒條</b>:用 Gear Rack Generator 之類的產生器直接生成正確齒形,不用手畫;想加齒輪時的軸距與模數概念</li>
+    <li><b>SG90 與機構整合</b>:伺服搖臂鎖上自製雷切件,轉動變成機構動作</li>
+    <li><b>雷切專案資源</b>:Thingiverse 上整批「全雷射切割」專案,切割檔直接下載直接切</li>
+    <li><b>燈光收尾</b>:LED 燈條/燈光棒與雷切件結合,作品從「會動」進化到「會亮」</li>
+    <li><b>給學生的視野</b>:雷射切割機不只是切名牌——從機構、電控到燈光,都是同一台機器的專題語彙</li>
   </ul>
 </section>
 
@@ -269,27 +298,39 @@ const $ = s => document.querySelector(s);
 const fmt = t => { t=Math.max(0,Math.round(t)); const h=t/3600|0,m=t%3600/60|0,s=t%60;
   return (h? h+":"+String(m).padStart(2,"0") : m) + ":" + String(s).padStart(2,"0"); };
 
-// ── 完整版 YouTube 播放器與章節跳轉 ──
-const hasYT = typeof YT_IDS!=="undefined" && YT_IDS.full;
-if(hasYT){
-  $("#ytmain").innerHTML = `<div class="videoframe"><div class="ytbox">
-    <iframe id="ytif" src="https://www.youtube.com/embed/${YT_IDS.full}" title="完整複習版"
-      allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe>
-    </div><div class="cap">完整複習版(4:21:31)——五節章卡,已剪除長靜默</div></div>`;
-  $("#chapjump").innerHTML = CHAPTERS.map(c=>
-    `<button onclick="seek(${c.full_start})">${"一二三四五"[c.n-1]}、${c.title}(${fmt(c.full_start)})</button>`).join("");
-  if(YT_IDS.merged) $("#mergednote").innerHTML =
-    `<a href="https://youtu.be/${YT_IDS.merged}" target="_blank" rel="noopener">操作示範版(72 分)</a> 只保留畫面有動作的段落,適合快速回顧步驟。`;
-}else{
-  $("#ytmain").innerHTML = `<div class="pending"><b>影片上架中。</b>完整複習版(4:21:31)與操作示範版(72 分)
-    將以 YouTube(未列出)提供——上傳後把影片 ID 填入 <code>data/config.js</code> 即自動啟用章節跳轉與逐字稿深連結。</div>`;
+// ── 兩日 YouTube 播放器與章節跳轉 ──
+const DAYS = {
+  1: {id: (typeof YT_IDS!=="undefined" && YT_IDS.full)  || "", merged: YT_IDS.merged  || "",
+      slot: "#ytmain",  jump: "#chapjump",  ifid: "ytif1",
+      cap: "第一天完整複習版(4:21:31)——五節章卡,已剪除長靜默",
+      pend: "第一天完整複習版(4:21:31)與操作示範版(72 分)"},
+  2: {id: (typeof YT_IDS!=="undefined" && YT_IDS.full2) || "", merged: YT_IDS.merged2 || "",
+      slot: "#ytmain2", jump: "#chapjump2", ifid: "ytif2",
+      cap: "第二天完整複習版(約 3:50)——上機實作+齒輪與燈光,已剪除等待段",
+      pend: "第二天完整複習版與操作示範版"},
+};
+const CHN = ["","一","二","三","四","五","六","七"];
+for (const d of [1,2]) {
+  const D = DAYS[d];
+  if (D.id) {
+    $(D.slot).innerHTML = `<div class="videoframe"><div class="ytbox">
+      <iframe id="${D.ifid}" src="https://www.youtube.com/embed/${D.id}" title="完整複習版 D${d}"
+        allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe>
+      </div><div class="cap">${D.cap}</div></div>`;
+    $(D.jump).innerHTML = CHAPTERS.filter(c=>c.day===d).map(c=>
+      `<button onclick="seek(${d},${c.full_start})">${CHN[c.n]}、${c.title}(${fmt(c.full_start)})</button>`).join("");
+  } else {
+    $(D.slot).innerHTML = `<div class="pending"><b>影片上架中。</b>${D.pend}
+      將以 YouTube(未列出)提供——上傳後把影片 ID 填入 <code>data/config.js</code> 即自動啟用章節跳轉與逐字稿深連結。</div>`;
+  }
 }
-function seek(t){ const f=$("#ytif"); if(!f) return;
-  f.src = `https://www.youtube.com/embed/${YT_IDS.full}?start=${Math.floor(t)}&autoplay=1`;
+if (DAYS[1].merged) $("#mergednote").innerHTML =
+  `<a href="https://youtu.be/${DAYS[1].merged}" target="_blank" rel="noopener">操作示範版(72 分)</a> 只保留畫面有動作的段落,適合快速回顧步驟。`;
+function seek(d, t){ const D=DAYS[d], f=document.getElementById(D.ifid); if(!f||!D.id) return;
+  f.src = `https://www.youtube.com/embed/${D.id}?start=${Math.floor(t)}&autoplay=1`;
   f.scrollIntoView({behavior:"smooth",block:"center"}); }
 
-// ── 逐字稿搜尋 ──
-const CHN = ["","一","二","三","四","五"];
+// ── 逐字稿搜尋(兩日) ──
 let timer=null;
 $("#q").addEventListener("input", e=>{ clearTimeout(timer);
   timer=setTimeout(()=>run(e.target.value.trim()),160); });
@@ -301,9 +342,10 @@ function run(q){
   const hits=TRANSCRIPT.filter(r=>r.x.includes(q)).slice(0,200);
   hint.textContent = hits.length ? `${hits.length} 筆(最多顯示 200)` : "沒有找到——換個寫法試試(逐字稿為自動轉寫)";
   box.innerHTML = hits.map(r=>{
-    const link = (hasYT && r.f!=null)
-      ? `<a href="javascript:void(0)" onclick="seek(${r.f})">▶ ${fmt(r.f)}</a>`
-      : `第${CHN[r.c]}章 ${fmt(r.t)}`;
+    const D = DAYS[r.d];
+    const link = (D && D.id && r.f!=null)
+      ? `<a href="javascript:void(0)" onclick="seek(${r.d},${r.f})">▶ D${r.d} ${fmt(r.f)}</a>`
+      : `D${r.d}.第${CHN[r.c]}章 ${fmt(r.t)}`;
     return `<div class="hit"><div class="ts">${link}</div><div>${esc(r.x).replaceAll(esc(q),`<mark>${esc(q)}</mark>`)}</div></div>`;
   }).join("");
 }
