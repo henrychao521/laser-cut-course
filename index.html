@@ -145,7 +145,7 @@ footer{border-top:3px double var(--ink);margin-top:70px;padding-top:18px;
   <h2><span class="no">DAY 1</span>第一天.設計(7/7):課程五章</h2>
   <div id="ytmain"></div>
   <div class="chapbtns" id="chapjump"></div>
-  <div class="margin-note">完整複習版(4:21:31)適合回家逐段重看;<span id="mergednote">操作示範版(72 分)只保留畫面有動作的段落,適合快速回顧步驟。</span></div>
+  <div class="margin-note" id="d1note"></div>
 
   <h3 id="ch1">一、課程資源與公開平台<span style="color:var(--dim);font-weight:400;font-size:13px">(0:00:00 起)</span></h3>
   <ul class="points">
@@ -333,6 +333,10 @@ for (const d of [1,2]) {
       將以 YouTube(未列出)提供——上傳後把影片 ID 填入 <code>data/config.js</code> 即自動啟用章節跳轉與逐字稿深連結。</div>`;
   }
 }
+// 影片未上架時不要先寫「適合回家逐段重看」，那段旁註原本無條件顯示
+$("#d1note").innerHTML = DAYS[1].id
+  ? '完整複習版(4:21:31)適合回家逐段重看;<span id="mergednote">操作示範版(72 分)只保留畫面有動作的段落,適合快速回顧步驟。</span>'
+  : '<span id="mergednote">操作示範版(72 分)只保留畫面有動作的段落,適合快速回顧步驟。</span>';
 if (DAYS[1].merged) $("#mergednote").innerHTML =
   `<a href="https://youtu.be/${DAYS[1].merged}" target="_blank" rel="noopener">操作示範版(72 分)</a> 只保留畫面有動作的段落,適合快速回顧步驟。`;
 function seek(d, t){ const D=DAYS[d], f=document.getElementById(D.ifid); if(!f||!D.id) return;
@@ -347,15 +351,24 @@ function esc(s){return s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;
 function run(q){
   const box=$("#hits"), hint=$("#searchhint");
   box.innerHTML=""; hint.textContent="";
-  if(q.length<2) return;
-  const hits=TRANSCRIPT.filter(r=>r.x.includes(q)).slice(0,200);
-  hint.textContent = hits.length ? `${hits.length} 筆(最多顯示 200)` : "沒有找到——換個寫法試試(逐字稿為自動轉寫)";
+  // 一個中文字就是有意義的查詢(膠、孔、燒…)，門檻只擋空字串
+  if(!q) return;
+  // 大小寫不敏感：學生打 arduino / dxf / led 也要找得到
+  const ql=q.toLowerCase();
+  const all=TRANSCRIPT.filter(r=>r.x.toLowerCase().includes(ql));
+  const hits=all.slice(0,200);
+  // 先算總數再截斷，否則超過 200 筆時會回報「200 筆」而不是真實筆數
+  hint.textContent = all.length
+    ? (all.length>hits.length ? `${all.length} 筆(顯示前 ${hits.length} 筆)` : `${all.length} 筆`)
+    : "沒有找到——換個寫法試試(逐字稿為自動轉寫)";
   box.innerHTML = hits.map(r=>{
     const D = DAYS[r.d];
     const link = (D && D.id && r.f!=null)
       ? `<a href="javascript:void(0)" onclick="seek(${r.d},${r.f})">▶ D${r.d} ${fmt(r.f)}</a>`
       : `D${r.d}.第${CHN[r.c]}章 ${fmt(r.t)}`;
-    return `<div class="hit"><div class="ts">${link}</div><div>${esc(r.x).replaceAll(esc(q),`<mark>${esc(q)}</mark>`)}</div></div>`;
+    // 用原文的大小寫做標記，否則大小寫不同的命中會標不到
+    const marked = esc(r.x).replace(new RegExp(ql.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'), m=>`<mark>${m}</mark>`);
+    return `<div class="hit"><div class="ts">${link}</div><div>${marked}</div></div>`;
   }).join("");
 }
 </script>
