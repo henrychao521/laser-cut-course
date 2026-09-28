@@ -124,7 +124,7 @@ footer{border-top:3px double var(--ink);margin-top:70px;padding-top:18px;
   <div class="kicker">教師研習.課程紀錄站</div>
   <h1>雷射切割機在專題上的應用</h1>
   <div class="meta">2026 年 7 月 7 日(設計)+ 7 月 9 日(實作).主講 <b>趙珩宇</b>.二日共 <b>9 小時</b> 錄影
-    → 精華/操作示範/完整複習多版影片.逐字稿 <b>8,709</b> 句可搜尋</div>
+    → 精華/操作示範/完整複習多版影片.逐字稿 <b class="tcount">8,709</b> 句可搜尋</div>
 </header>
 
 <section id="highlight">
@@ -266,7 +266,7 @@ footer{border-top:3px double var(--ink);margin-top:70px;padding-top:18px;
 
 <section id="search">
   <h2><span class="no">🔍</span>逐字稿全文搜尋</h2>
-  <p>輸入關鍵詞,在 4,805 句課程逐字稿裡找講到的段落(whisper 自動轉寫,未逐句人工校對):</p>
+  <p>輸入關鍵詞,在兩天共 <span class="tcount">8,709</span> 句課程逐字稿裡找講到的段落(whisper 自動轉寫,未逐句人工校對):</p>
   <input id="q" type="search" placeholder="試試:雷射、草圖、尺寸、馬達、壓克力、匯出…">
   <div id="hits"></div>
   <p class="hint" id="searchhint"></p>
@@ -304,6 +304,8 @@ footer{border-top:3px double var(--ink);margin-top:70px;padding-top:18px;
 <script src="data/transcript.js"></script>
 <script>
 const $ = s => document.querySelector(s);
+// 逐字稿句數由資料實際筆數帶入，避免資料更新後頁面上的數字沒跟著改
+document.querySelectorAll(".tcount").forEach(el => el.textContent = TRANSCRIPT.length.toLocaleString());
 const fmt = t => { t=Math.max(0,Math.round(t)); const h=t/3600|0,m=t%3600/60|0,s=t%60;
   return (h? h+":"+String(m).padStart(2,"0") : m) + ":" + String(s).padStart(2,"0"); };
 
