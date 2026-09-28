@@ -226,17 +226,19 @@ const keyEls={};
     else blacks.push({m,x:wx-13});
   }
   piano.style.width=wx+'px';
+  // 螢幕報讀與鍵盤操作：每個琴鍵可 Tab 聚焦、報讀音名，Enter／空白鍵按下
+  const a11y=(d,m)=>{ d.setAttribute('role','button'); d.tabIndex=0; d.setAttribute('aria-label',nameOf(m)); };
   const kbdFor=m=>{ const k=Object.keys(KMAP).find(k=>KMAP[k]===m); return k?k.toUpperCase():''; };
   for(const w of whites){
     const d=document.createElement('div');
-    d.className='wk'; d.style.left=w.x+'px'; d.dataset.m=w.m;
+    d.className='wk'; d.style.left=w.x+'px'; d.dataset.m=w.m; a11y(d,w.m);
     d.innerHTML=(kbdFor(w.m)?'<div class="kbd-hint">'+kbdFor(w.m)+'</div>':'')+
       (w.m%12===0?'<div class="klabel">'+nameOf(w.m)+'</div>':'');
     piano.appendChild(d); keyEls[w.m]=d;
   }
   for(const b of blacks){
     const d=document.createElement('div');
-    d.className='bk'; d.style.left=b.x+'px'; d.dataset.m=b.m;
+    d.className='bk'; d.style.left=b.x+'px'; d.dataset.m=b.m; a11y(d,b.m);
     if(kbdFor(b.m)) d.innerHTML='<div class="kbd-hint">'+kbdFor(b.m)+'</div>';
     piano.appendChild(d); keyEls[b.m]=d;
   }
@@ -294,13 +296,18 @@ piano.addEventListener('pointerdown',e=>{
 });
 window.addEventListener('pointerup',()=>{ if(downInfo) release(downInfo.m); });
 const heldKeys=new Set();
+const focusedKey=e=>(e.key==='Enter'||e.key===' ')&&e.target.closest&&e.target.closest('.wk,.bk');
 window.addEventListener('keydown',e=>{
   if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA') return;
+  const fk=focusedKey(e);
+  if(fk){ e.preventDefault(); if(!e.repeat&&!downInfo) press(+fk.dataset.m); return; }
   const m=KMAP[e.key.toLowerCase()];
   if(m===undefined||heldKeys.has(e.key)) return;
   heldKeys.add(e.key); press(m);
 });
 window.addEventListener('keyup',e=>{
+  const fk=focusedKey(e);
+  if(fk){ release(+fk.dataset.m); return; }
   const m=KMAP[e.key.toLowerCase()];
   heldKeys.delete(e.key);
   if(m!==undefined) release(m);
