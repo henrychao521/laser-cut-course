@@ -258,7 +258,7 @@ footer{border-top:3px double var(--ink);margin-top:70px;padding-top:18px;
   <div class="calcframe"><iframe src="tools/buzzer-composer.html" loading="lazy" style="height:1250px" title="單體作曲台 — tone() 旋律產生器"></iframe></div>
   <p class="hint">獨立開啟:<a href="tools/buzzer-composer.html" target="_blank" rel="noopener">單體作曲台</a>
   .範例程式:<a href="tools/tone_melody_template.ino" download>tone_melody_template.ino</a>
-  (接線:單體(+) ─ 100~220Ω ─ D2,單體(-) ─ GND;適用 Uno / LinkIt 7697)</p>
+  (接線:單體(+) ─ 220Ω ─ D2,單體(-) ─ GND;適用 Uno / LinkIt 7697。喇叭單體只有約 8Ω,電阻別再調小:串 100Ω 在 Uno 的 5V 下約 46 mA,已超過腳位 40 mA 的絕對上限;想更大聲請加電晶體驅動)</p>
   <div class="margin-note"><b>研習成品完整程式</b>:<a href="tools/0709_kinetic_device.ino" download>0709_kinetic_device.ino</a>
   ——第二天成品「雷切音樂動態裝置」的實際韌體:三顆掃動伺服 + 連續旋轉伺服 + 單體播放「梅岡寄情」(315021 同學譜曲)+ LED,
   全程 <code>millis()</code> 非阻塞式寫法,音樂、伺服、燈互不卡頓;已移除 MP3 模組,單體直接接 D2。</div>
