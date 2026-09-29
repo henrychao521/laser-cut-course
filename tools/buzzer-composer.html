@@ -114,7 +114,7 @@ textarea{width:100%;height:90px;font-family:ui-monospace,monospace;font-size:12p
     <h1>單體作曲台</h1>
   </div>
 </header>
-<p class="sub">按琴鍵作曲（音色即為單體方波），完成後複製代碼，貼進 tone() 範例程式取代 MELODY 陣列。內容會自動存在這台電腦的瀏覽器裡。</p>
+<p class="sub">按琴鍵作曲（音色即為單體方波），完成後複製程式碼，貼進 tone() 範例程式取代 MELODY 陣列。內容會自動存在這台電腦的瀏覽器裡。</p>
 
 <div class="panel">
   <h2>輸入方式</h2>
@@ -159,7 +159,7 @@ textarea{width:100%;height:90px;font-family:ui-monospace,monospace;font-size:12p
     <div class="seq" id="seq"></div>
     <div class="stat" id="stat"></div>
     <details>
-      <summary>貼上舊代碼繼續編輯</summary>
+      <summary>貼上舊程式碼繼續編輯</summary>
       <textarea id="importBox" placeholder="貼上 { 392, 500 }, { 0, 250 }, ... 形式的內容（整段 MELODY 陣列也可以）"></textarea>
       <div class="controls" style="margin-top:8px">
         <button id="importBtn">匯入（接在後面）</button>
@@ -170,9 +170,9 @@ textarea{width:100%;height:90px;font-family:ui-monospace,monospace;font-size:12p
   </div>
 
   <div class="panel">
-    <h2>產出代碼</h2>
+    <h2>產出程式碼</h2>
     <div class="codebar">
-      <button id="copyBtn" class="primary">複製代碼</button>
+      <button id="copyBtn" class="primary">複製程式碼</button>
       <span class="copied" id="copiedMsg">已複製 ✓</span>
       <span class="hint">貼進 .ino，取代原本 NOTE_COUNT 與 MELODY 兩段。</span>
     </div>
