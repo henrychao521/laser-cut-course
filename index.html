@@ -267,7 +267,7 @@ footer{border-top:3px double var(--ink);margin-top:70px;padding-top:18px;
 <section id="search">
   <h2><span class="no">🔍</span>逐字稿全文搜尋</h2>
   <p>輸入關鍵詞,在兩天共 <span class="tcount">8,709</span> 句課程逐字稿裡找講到的段落(whisper 自動轉寫,未逐句人工校對):</p>
-  <input id="q" type="search" placeholder="試試:雷射、草圖、尺寸、馬達、壓克力、匯出…">
+  <input id="q" type="search" aria-label="搜尋課程逐字稿" placeholder="試試:雷射、草圖、尺寸、馬達、壓克力、匯出…">
   <div id="hits"></div>
   <p class="hint" id="searchhint"></p>
 </section>
@@ -369,7 +369,8 @@ function run(q){
       ? `<a href="javascript:void(0)" onclick="seek(${r.d},${r.f})">▶ D${r.d} ${fmt(r.f)}</a>`
       : `D${r.d}.第${CHN[r.c]}章 ${fmt(r.t)}`;
     // 用原文的大小寫做標記，否則大小寫不同的命中會標不到
-    const marked = esc(r.x).replace(new RegExp(ql.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'), m=>`<mark>${m}</mark>`);
+    // 先在原文上切出命中段再各自轉義；對轉義後的字串做取代，搜 & 或 amp 會把 &amp; 拆壞
+    const marked = r.x.split(new RegExp('('+ql.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi')).map((p,i)=>i%2?`<mark>${esc(p)}</mark>`:esc(p)).join('');
     return `<div class="hit"><div class="ts">${link}</div><div>${marked}</div></div>`;
   }).join("");
 }
