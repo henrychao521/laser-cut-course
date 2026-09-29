@@ -110,7 +110,7 @@ textarea{width:100%;height:90px;font-family:ui-monospace,monospace;font-size:12p
 <div class="wrap">
 <header>
   <div>
-    <div class="eyebrow">0707 · TONE() 旋律產生器</div>
+    <div class="eyebrow">雷切研習 · TONE() 旋律產生器</div>
     <h1>單體作曲台</h1>
   </div>
 </header>
@@ -228,7 +228,8 @@ const keyEls={};
   piano.style.width=wx+'px';
   // 螢幕報讀與鍵盤操作：每個琴鍵可 Tab 聚焦、報讀音名，Enter／空白鍵按下
   const a11y=(d,m)=>{ d.setAttribute('role','button'); d.tabIndex=0; d.setAttribute('aria-label',nameOf(m)); };
-  const kbdFor=m=>{ const k=Object.keys(KMAP).find(k=>KMAP[k]===m); return k?k.toUpperCase():''; };
+  // C5 同時對應底排的「,」與上排的「Q」，兩個都標出來（原本只找到第一個「,」，說明寫的 Q 在琴鍵上找不到）
+  const kbdFor=m=>Object.keys(KMAP).filter(k=>KMAP[k]===m).map(k=>k.toUpperCase()).join(' ');
   for(const w of whites){
     const d=document.createElement('div');
     d.className='wk'; d.style.left=w.x+'px'; d.dataset.m=w.m; a11y(d,w.m);
@@ -331,7 +332,9 @@ function render(){
     box.appendChild(c);
   });
   const total=seq.reduce((s,n)=>s+n.ms,0);
-  $('stat').textContent=seq.length+' 個項目 ・ 總長 '+(total/1000).toFixed(1)+' 秒';
+  // 每個音在 Uno 上佔 4 bytes 的 SRAM（全部只有 2 KB），太長的曲子要提醒
+  $('stat').textContent=seq.length+' 個項目 ・ 總長 '+(total/1000).toFixed(1)+' 秒'+
+    (seq.length>200?' ・ ⚠ 約 '+seq.length*4+' bytes：Uno 記憶體只有 2 KB，再加上伺服等程式可能不穩，建議 200 個以內':'');
   $('code').textContent=genCode();
 }
 function genCode(){
@@ -365,7 +368,7 @@ function stopPlay(){
 
 // ---------- undo / clear ----------
 $('undoBtn').onclick=()=>{ if(!history.length) return; seq=JSON.parse(history.pop()); save(); render(); };
-$('clearBtn').onclick=()=>{ if(!seq.length) return; snapshot(); seq=[]; save(); render(); };
+$('clearBtn').onclick=()=>{ if(!seq.length) return; stopPlay(); snapshot(); seq=[]; save(); render(); };
 
 // ---------- copy ----------
 $('copyBtn').onclick=async()=>{
@@ -384,6 +387,7 @@ function doImport(replace){
       if(f>0){ const midi=Math.round(69+12*Math.log2(f/440)); label=nameOf(midi); }
       return {f,ms,label}; });
   if(!pairs.length){ $('importMsg').textContent='沒有讀到 {頻率, 毫秒} 格式的內容'; return; }
+  if(replace) stopPlay();   // 換掉整首時不能讓播放計時器沿用舊的序號
   snapshot(); if(replace) seq=pairs; else seq=seq.concat(pairs);
   save(); render(); $('importMsg').textContent='匯入 '+pairs.length+' 個項目 ✓'; $('importBox').value='';
 }
